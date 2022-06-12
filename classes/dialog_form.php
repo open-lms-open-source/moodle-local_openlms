@@ -33,6 +33,11 @@ abstract class dialog_form extends \moodleform {
     private $islegacyajaxrequest = false;
 
     public function __construct($action = null, $customdata = null, $method = 'post', $target = '', $attributes = null, $editable = true, $ajaxformdata = null) {
+        if (AJAX_SCRIPT) {
+            // Make sure form element ids are randomised in case there are multiple forms on the page.
+            $attributes = ['data-random-ids' => 1] + ($attributes ?: []);
+        }
+
         parent::__construct($action, $customdata, $method, $target, $attributes, $editable, $ajaxformdata);
 
         if (AJAX_SCRIPT) {
