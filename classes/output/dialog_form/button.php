@@ -28,6 +28,9 @@ final class button extends action {
     /** @var bool is this a primary button? */
     protected $primary;
 
+    /** @var string extra CSS classes */
+    protected $class = '';
+
     public function __construct(\moodle_url $formurl, $title, bool $primary = false) {
         parent::__construct($formurl, $title);
         $this->primary = $primary;
@@ -39,5 +42,13 @@ final class button extends action {
 
     public function set_primary(bool $value): void {
         $this->primary = $value;
+    }
+
+    public function set_class(string $class): void {
+        $this->class = $class;
+    }
+
+    public function get_class(): string {
+        return $this->class;
     }
 }

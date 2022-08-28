@@ -37,6 +37,7 @@ class renderer extends \plugin_renderer_base {
             'formurl' => $action->get_form_url()->out(false),
             'dialogname' => $action->get_dialog_name(),
             'aftersubmit' => $action->get_after_submit(),
+            'class' => $action->get_class(),
             'uniqid' => uniqid(),
         ];
 
@@ -54,6 +55,7 @@ class renderer extends \plugin_renderer_base {
             'formurl' => $button->get_form_url()->out(false),
             'dialogname' => $button->get_dialog_name(),
             'aftersubmit' => $button->get_after_submit(),
+            'class' => $button->get_class(),
             'uniqid' => uniqid(),
         ];
         if ($button->is_primary()) {

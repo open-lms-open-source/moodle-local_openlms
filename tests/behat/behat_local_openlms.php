@@ -33,7 +33,8 @@ class behat_local_openlms extends behat_base {
     /**
      * Submits modal form dialog.
      *
-     * @When /^I press dialog form button "(?P<element_string>(?:[^"]|\\")*)"$/
+     * @When I press dialog form button :element
+     *
      * @param string $element Element we look for
      */
     public function i_press_dialog_form_button($element) {
@@ -78,6 +79,22 @@ class behat_local_openlms extends behat_base {
 
         if (strpos($content, "Scheduled task '$taskname' completed") === false) {
             throw new ExpectationException("Scheduled task '$taskname' did not complete successfully, content : " . $content, $this->getSession());
+        }
+    }
+
+    /**
+     * Admin bookmark takes way too much space on admin pages,
+     * so get rid of it.
+     *
+     * @Given unnecessary Admin bookmarks block gets deleted
+     */
+    public function delete_admin_bookmarks_block() {
+        global $CFG, $DB;
+        require_once("$CFG->libdir/blocklib.php");
+
+        $instance = $DB->get_record('block_instances', ['blockname' => 'admin_bookmarks']);
+        if ($instance) {
+            blocks_delete_instance($instance);
         }
     }
 }

@@ -28,12 +28,23 @@ final class icon extends action {
     /** @var \pix_icon */
     protected $pixicon;
 
+    /** @var string extra CSS classes */
+    protected $class = '';
+
     public function __construct(\moodle_url $formurl, string $pix, $title, string $component = 'moodle') {
         parent::__construct($formurl, $title);
-        $this->pixicon = new \pix_icon($pix, $title, $component);
+        $this->pixicon = new \pix_icon($pix, $title, $component, ['aria-hidden' => 'true']);
     }
 
     public function get_icon(): \pix_icon {
         return $this->pixicon;
+    }
+
+    public function set_class(string $class): void {
+        $this->class = $class;
+    }
+
+    public function get_class(): string {
+        return $this->class;
     }
 }
