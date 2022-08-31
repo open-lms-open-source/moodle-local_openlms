@@ -20,7 +20,7 @@ namespace local_openlms\privacy;
  * Privacy info for My programs overview block.
  *
  * @package    local_openlms
- * @copyright  Copyright (c) 2022 Open LMS (https://www.openlms.net/)
+ * @copyright  2022 Open LMS (https://www.openlms.net/)
  * @author     Petr Skoda
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
