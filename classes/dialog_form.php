@@ -42,9 +42,12 @@ abstract class dialog_form extends \moodleform {
 
         if (AJAX_SCRIPT) {
             $this->islegacyajaxrequest = true;
-            // Do the sam hacks as lib/ajax/service.php here to allow fragment rendering.
-            define('PREFERRED_RENDERER_TARGET', RENDERER_TARGET_GENERAL);
-            ob_start(); // We will be sending back only the form data.
+            // There might be two dialog forms initialised on one page.
+            if (!defined('PREFERRED_RENDERER_TARGET')) {
+                // Do the sam hacks as lib/ajax/service.php here to allow fragment rendering.
+                define('PREFERRED_RENDERER_TARGET', RENDERER_TARGET_GENERAL);
+                ob_start(); // We will be sending back only the form data.
+            }
         }
     }
 
