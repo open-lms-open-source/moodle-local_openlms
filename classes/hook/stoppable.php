@@ -14,22 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace local_openlms\hook;
+
 /**
- * Utility code for OpenLMS plugins.
+ * Stoppable hook interface based on "StoppableEventInterface" from PSR-14.
  *
- * @package    local_openlms
- * @copyright  2022 Open LMS (https://www.openlms.net/)
- * @author     Petr Skoda
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_openlms
+ * @author    Petr Skoda
+ * @copyright 2022 Open LMS
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-/** @var stdClass $plugin */
-
-$plugin->version   = 2022092000;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021051704;        // Requires this Moodle version.
-$plugin->component = 'local_openlms';
-$plugin->maturity  = MATURITY_RC;
-$plugin->release   = 'v1.0.7.1+';
-$plugin->supported = [311, 400];
+interface stoppable {
+    /**
+     * Indicates if hook dispatching should be stopped.
+     * @return bool
+     */
+    public function is_propagation_stopped(): bool;
+}

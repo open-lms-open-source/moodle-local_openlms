@@ -25,5 +25,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['cachedef_hookcallbacks'] = 'Hook callbacks';
+$string['hookcallback'] = 'Callback';
+$string['hookcallbacks'] = 'Callbacks';
+$string['hookdeprecates'] = 'Deprecated lib.php callbacks';
+$string['hookdescription'] = 'Description';
+$string['hookname'] = 'Hook';
+$string['hookoverride'] = 'Override hook';
+$string['hookpriority'] = 'Priority';
+$string['hookreset'] = 'Reset hook';
+$string['hooksoverview'] = 'Hooks overview';
 $string['pluginname'] = 'Open LMS utilities';
 $string['privacy:metadata'] = 'Open LMS extras plugin does not store data itself.';
