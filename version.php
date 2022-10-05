@@ -31,5 +31,5 @@ $plugin->version   = 2022083100;        // The current plugin version (Date: YYY
 $plugin->requires  = 2021051704;        // Requires this Moodle version.
 $plugin->component = 'local_openlms';
 $plugin->maturity  = MATURITY_RC;
-$plugin->release   = 'v1.0.6.2+';
+$plugin->release   = 'v1.0.7.1';
 $plugin->supported = [311, 400];
