@@ -42,6 +42,8 @@ abstract class action implements \renderable {
     protected $aftersubmit = self::AFTER_SUBMIT_RELOAD;
     /** @var bool set to true to use redirect to full page form */
     public $legacyformtest = false;
+    /** @var bool is this action disabled? */
+    protected $disabled = false;
 
     public function __construct(\moodle_url $formurl, $title) {
         $this->formurl = $formurl;
@@ -71,5 +73,13 @@ abstract class action implements \renderable {
 
     public function get_dialog_name(): string {
         return $this->dialogname;
+    }
+
+    public function is_disabled(): bool {
+        return $this->disabled;
+    }
+
+    public function set_disabled(bool $value): void {
+        $this->disabled = $value;
     }
 }

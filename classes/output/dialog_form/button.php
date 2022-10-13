@@ -31,6 +31,9 @@ final class button extends action {
     /** @var string extra CSS classes */
     protected $class = '';
 
+    /** @var \pix_icon */
+    protected $pixicon;
+
     public function __construct(\moodle_url $formurl, $title, bool $primary = false) {
         parent::__construct($formurl, $title);
         $this->primary = $primary;
@@ -50,5 +53,13 @@ final class button extends action {
 
     public function get_class(): string {
         return $this->class;
+    }
+
+    public function set_icon(string $pix, string $component): void {
+        $this->pixicon = new \pix_icon($pix, '', $component, ['aria-hidden' => 'true']);
+    }
+
+    public function get_icon(): ?\pix_icon {
+        return $this->pixicon;
     }
 }

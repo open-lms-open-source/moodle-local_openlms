@@ -39,7 +39,9 @@ class behat_local_openlms extends behat_base {
      */
     public function i_press_dialog_form_button($element) {
         if (!$this->running_javascript()) {
-            throw new Behat\Mink\Exception\ExpectationException('Can\'t take focus off from "' . $element . '" in non-js mode', $this->getSession());
+            $node = $this->get_node_in_container('button', $element, 'css_element', '.mform');
+            $node->click();
+            return;
         }
 
         $node = $this->get_node_in_container('button', $element, 'css_element', '.local_openlms-dialog_form');

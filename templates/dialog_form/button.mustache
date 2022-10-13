@@ -16,9 +16,10 @@ along with Moodle. If not, see
 <http: //www.gnu.org/licenses />.
 }}
 
+<noscript><form method="get" action="{{formurl}}"><button type="submit">{{title}}</button></form></noscript>
 <button id="dialog-form-button-{{uniqid}}"
   data-form-url="{{formurl}}" data-dialog-name="{{dialogname}}" data-after-submit="{{aftersubmit}}"
-  class="btn {{#primary}}btn-primary{{/primary}}{{^primary}}btn-secondary{{/primary}} {{class}}">{{title}}</button>
+  class="btn {{#primary}}btn-primary{{/primary}}{{^primary}}btn-secondary{{/primary}} {{class}}">{{{icon}}}{{title}}</button>
 
 {{#js}}
 require([
