@@ -15,25 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Caches.
+ * My programs block installation.
  *
  * @package   local_openlms
  * @copyright 2022 Open LMS (https://www.openlms.net/)
  * @author    Petr Skoda
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+function xmldb_local_openlms_install() {
+    global $DB;
 
-$definitions = array(
-    // Hook callbacks cache.
-    // There is a static cache in hook manager, data is fetched once per page on first hook execution.
-    // This cache needs to be invalidated during upgrades when code changes and when callbacks
-    // overrides are updated.
-    'hookcallbacks' => array(
-        'mode' => cache_store::MODE_APPLICATION,
-        'simplekeys' => true,
-        'simpledata' => true,
-        'staticacceleration' => false,
-        // WARNING: Manual cache purge may be required when overriding hook callbacks.
-        'canuselocalstore' => true,
-    ),
-);
+    if (file_exists(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php')) {
+        require_once(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php');
+        // NOTE: this is here because it has to run after block_timeline and
+        // block_recentlyaccessedcourses installation.
+        block_myprograms_add_block_to_dashboards();
+    }
+}
