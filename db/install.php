@@ -29,6 +29,8 @@ function xmldb_local_openlms_install() {
         require_once(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php');
         // NOTE: this is here because it has to run after block_timeline and
         // block_recentlyaccessedcourses installation.
-        block_myprograms_add_block_to_dashboards();
+        if (!defined('PHPUNIT_UTIL') || !PHPUNIT_UTIL) {
+            block_myprograms_add_block_to_dashboards();
+        }
     }
 }
