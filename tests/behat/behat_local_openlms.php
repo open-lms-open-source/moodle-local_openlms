@@ -219,4 +219,18 @@ class behat_local_openlms extends behat_base {
             throw new ExpectationException('"' . $text . '" text was found in the "' . $label . '" element', $this->getSession());
         }
     }
+
+    /**
+     * Opens user profile page.
+     *
+     * @Given I am on the profile page of user :username
+     *
+     * @param string $username
+     */
+    public function i_am_on_user_profile_page(string $username) {
+        global $DB;
+        $user = $DB->get_record('user', ['username' => $username], '*', MUST_EXIST);
+        $url = new moodle_url('/user/profile.php', ['id' => $user->id]);
+        $this->execute('behat_general::i_visit', [$url]);
+    }
 }

@@ -38,3 +38,15 @@ Feature: Test local_openlms behat steps
     Then I should not see "program" in the "Full name:" definition list item
   # Uncomment following to test a failure.
     #And I should not see "Program" in the "Full name:" definition list item
+
+  Scenario: local_openlms behat step: I am on the profile page of user
+    Given the following "users" exist:
+      | username | firstname | lastname | email                |
+      | student1 | First     | Student  | student1@example.com |
+      | student2 | Second    | Student  | student2@example.com |
+      | student3 | Third     | Student  | student3@example.com |
+    And I log in as "admin"
+    When I am on the profile page of user "student1"
+    Then I should see "First Student"
+    And I should see "User details"
+    And I should see "Today's logs"

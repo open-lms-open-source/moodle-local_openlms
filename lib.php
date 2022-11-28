@@ -24,7 +24,7 @@
  */
 
 function local_openlms_extend_navigation(global_navigation $navigation) {
-    if (isloggedin()
+    if (isloggedin() && !isguestuser()
         && file_exists(__DIR__ . '/../../enrol/programs/version.php')
         && enrol_is_enabled('programs')) {
 
@@ -46,6 +46,22 @@ function local_openlms_extend_navigation(global_navigation $navigation) {
                 new pix_icon('catalogue', '', 'enrol_programs'));
             $n->showinflatnavigation = true;
             $navigation->add_node($n, null);
+        }
+    }
+    if (isloggedin() && !isguestuser()
+        && file_exists(__DIR__ . '/../../admin/tool/udplans/version.php')
+    ) {
+        if (\tool_udplans\local\util::udplans_active()) {
+            if (\tool_udplans\local\plan::get_my_plans()) {
+                $n = $navigation->create(get_string('myplans', 'tool_udplans'),
+                    new moodle_url('/admin/tool/udplans/plans_my.php'),
+                    global_navigation::TYPE_CUSTOM,
+                    null,
+                    'myplans',
+                    new pix_icon('myplans', '', 'tool_udplans'));
+                $n->showinflatnavigation = true;
+                $navigation->add_node($n, 'mycourses');
+            }
         }
     }
 }

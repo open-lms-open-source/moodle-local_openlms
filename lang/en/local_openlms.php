@@ -36,4 +36,5 @@ $string['hookpriority'] = 'Priority';
 $string['hookreset'] = 'Reset hook';
 $string['hooksoverview'] = 'Hooks overview';
 $string['pluginname'] = 'Open LMS utilities';
-$string['privacy:metadata'] = 'Open LMS extras plugin does not store data itself.';
+$string['privacy:metadata:userid'] = 'User';
+$string['privacy:metadata:local_openlms_user_notified:tableexplanation'] = 'User notification tracking';

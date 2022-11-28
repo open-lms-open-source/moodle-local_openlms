@@ -14,23 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace local_openlms\local;
+
 /**
- * Open LMS support installation code.
+ * Base for classes implementing individual component notifications.
  *
  * @package   local_openlms
  * @copyright 2022 Open LMS (https://www.openlms.net/)
  * @author    Petr Skoda
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function xmldb_local_openlms_install() {
-    global $DB;
-
-    if (file_exists(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php')) {
-        require_once(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php');
-        // NOTE: this is here because it has to run after block_timeline and
-        // block_recentlyaccessedcourses installation.
-        if (!defined('PHPUNIT_UTIL') || !PHPUNIT_UTIL) {
-            block_myprograms_add_block_to_dashboards();
-        }
-    }
+abstract class notificationtype {
+    // TODO
 }
