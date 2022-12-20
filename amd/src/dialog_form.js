@@ -71,9 +71,6 @@ define([
      * @private
      */
     DialogForm.prototype.init = function() {
-        // Listen for the M.core.event.FILTER_CONTENT_UPDATED event
-        Y.on(M.core.event.FILTER_CONTENT_UPDATED, contentUpdated, this);
-
         var requiredStrings = [
             {key: 'collapseall', component: 'moodle'},
             {key: 'expandall', component: 'moodle'}
@@ -139,13 +136,6 @@ define([
                 return this.modal;
             }.bind(this))
             .fail(Notification.exception);
-    };
-
-    /**
-     * Executed when the M.core.event.FILTER_CONTENT_UPDATED event fires
-     */
-    const contentUpdated = function() {
-        $(".modal-body").animate({scrollTop: 0}, 0);
     };
 
     /**
