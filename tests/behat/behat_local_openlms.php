@@ -83,6 +83,8 @@ class behat_local_openlms extends behat_base {
         if (strpos($content, "Scheduled task '$taskname' completed") === false) {
             throw new ExpectationException("Scheduled task '$taskname' did not complete successfully, content : " . $content, $this->getSession());
         }
+
+        $this->look_for_exceptions();
     }
 
     /**

@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Utility code for OpenLMS plugins.
@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 
-$plugin->version   = 2023012200;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2023022600;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051704;        // Requires this Moodle version.
 $plugin->component = 'local_openlms';
 $plugin->maturity  = MATURITY_RC;

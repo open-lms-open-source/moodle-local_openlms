@@ -14,16 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_openlms\local;
+namespace local_openlms\notification;
 
 /**
- * Base for classes that described notification in plugin.
+ * Notification manager base tests.
  *
+ * @group     openlms
  * @package   local_openlms
- * @copyright 2022 Open LMS (https://www.openlms.net/)
  * @author    Petr Skoda
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2023 Open LMS
+ * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @coversDefaultClass \local_openlms\notification\manager
  */
-abstract class component_manager {
-    // TODO
+class manager_test extends \advanced_testcase {
+    protected function setUp(): void {
+        parent::setUp();
+        $this->resetAfterTest();
+    }
+
+    public function test_get_component() {
+        $this->assertSame('local_openlms', manager::get_component());
+    }
 }

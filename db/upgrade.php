@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Open LMS support upgrade code.
@@ -34,58 +34,53 @@ function xmldb_local_openlms_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2022112800) {
+    if ($oldversion < 2023022600) {
 
-// Define table local_openlms_notifications to be created.
+        // Define table local_openlms_user_notified to be dropped.
+        $table = new xmldb_table('local_openlms_user_notified');
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        // Define table local_openlms_notifications to be dropped.
         $table = new xmldb_table('local_openlms_notifications');
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
 
-        // Adding fields to table local_openlms_notifications.
+        // Define table local_openlms_notifications to be created.
+        $table = new xmldb_table('local_openlms_notifications');
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('component', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('instancetype', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('instanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('notificationtype', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('instanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('enabled', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         $table->add_field('custom', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
-        $table->add_field('subject', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('fullmessage', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('smallmessage', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('customjson', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('auxjson', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('auxint1', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('auxint2', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-
-        // Adding keys to table local_openlms_notifications.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('component-notificationtype-instanceid', XMLDB_INDEX_UNIQUE, ['component', 'notificationtype', 'instanceid']);
+        $dbman->create_table($table);
 
-        // Adding indexes to table local_openlms_notifications.
-        $table->add_index('component-instancetype-instanceid-notificationtype', XMLDB_INDEX_UNIQUE, ['component', 'instancetype', 'instanceid', 'notificationtype']);
-
-        // Conditionally launch create table for local_openlms_notifications.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-
-        // Define table local_openlms_notified to be created.
+        // Define table local_openlms_user_notified to be created.
         $table = new xmldb_table('local_openlms_user_notified');
-
-        // Adding fields to table local_openlms_notified.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('notificationid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('otherid1', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('otherid2', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('timenotified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('messageid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
-
-        // Adding keys to table local_openlms_notified.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('notificationid', XMLDB_KEY_FOREIGN, ['notificationid'], 'local_openlms_notifications', ['id']);
         $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
-
-        // Conditionally launch create table for local_openlms_notified.
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
+        $table->add_index('otherid1-otherid2', XMLDB_INDEX_NOTUNIQUE, ['otherid1', 'otherid2']);
+        $dbman->create_table($table);
 
         // Openlms savepoint reached.
-        upgrade_plugin_savepoint(true, 2022112800, 'local', 'openlms');
+        upgrade_plugin_savepoint(true, 2023022600, 'local', 'openlms');
     }
 
     return true;
