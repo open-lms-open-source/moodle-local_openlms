@@ -207,10 +207,12 @@ abstract class notificationtype {
      * @param int $userid
      * @param int|null $otherid1
      * @param int|null $otherid2
+     * @param bool|null $allowmultiple true means multiple notifications are allowed
      * @return void
      */
     final protected static function message_send(
-        \core\message\message $message, int $notificationid, int $userid, ?int $otherid1 = null, ?int $otherid2 = null
+        \core\message\message $message, int $notificationid, int $userid, ?int $otherid1 = null, ?int $otherid2 = null,
+        bool $allowmultiple = false
     ): void {
         global $DB;
 
@@ -219,7 +221,7 @@ abstract class notificationtype {
             debugging('invalid notification id', DEBUG_DEVELOPER);
             return;
         }
-        if ($DB->record_exists('local_openlms_user_notified',
+        if (!$allowmultiple && $DB->record_exists('local_openlms_user_notified',
             ['notificationid' => $notificationid, 'userid' => $userid, 'otherid1' => $otherid1, 'otherid2' => $otherid2])
         ) {
             // Likely caused by two concurrently running cron tasks.
