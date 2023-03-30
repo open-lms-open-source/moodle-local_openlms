@@ -112,7 +112,6 @@ class behat_local_openlms extends behat_base {
         }
     }
 
-
     /**
      * Looks for definition of a term in a list.
      *

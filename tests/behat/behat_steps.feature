@@ -18,7 +18,7 @@ Feature: Test local_openlms behat steps
       | fullname    | idnumber | category | public | archived |
       | Program 000 | PR0      |          | 0      | 0        |
     And I log in as "admin"
-    And I am on all programs management page
+    And I navigate to "Site administration > Programs > Program management" in site administration
     When I follow "Program 000"
     Then I should see "Program 000" in the "Full name:" definition list item
     And I should see "Program" in the "Full name:" definition list item
@@ -33,7 +33,7 @@ Feature: Test local_openlms behat steps
       | fullname    | idnumber | category | public | archived |
       | Program 000 | PR0      |          | 0      | 0        |
     And I log in as "admin"
-    And I am on all programs management page
+    And I navigate to "Site administration > Programs > Program management" in site administration
     When I follow "Program 000"
     Then I should not see "program" in the "Full name:" definition list item
   # Uncomment following to test a failure.
