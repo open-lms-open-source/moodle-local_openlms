@@ -125,6 +125,9 @@ define([
                 // Special exception for Cancel button, no need to send the cancel data to server, just close the dialog.
                 this.modal.getRoot().on('click', 'form input[type=submit][data-cancel]', this.cancelButtonPressed.bind(this));
 
+                // Unfortunately there is no data attribute on normal submit buttons, here goes a hack then.
+                this.modal.getBody().on('click', 'form input[type=submit]', this.submitButtonPressed.bind(this));
+
                 // We catch the form submit event and use it to submit the form with ajax.
                 this.modal.getRoot().on('submit', 'form', this.submitFormAjax.bind(this));
 
@@ -237,6 +240,21 @@ define([
     };
 
     /**
+     * Remember which submit button was clicked.
+     *
+     * @method submitButtonPressed
+     * @private
+     * @param {Event} e Form submission event.
+     */
+    DialogForm.prototype.submitButtonPressed = function(e) {
+        var btn = $(e.currentTarget);
+        if (btn.attr('data-no-submit') === '1') {
+            return;
+        }
+        btn.attr('data-clicked-button', '1');
+    };
+
+    /**
      * Validate form elements
      * @return {boolean} true if client-side validation has passed, false if there are errors
      */
@@ -283,6 +301,11 @@ define([
         // We don't want to do a real form submission.
         e.preventDefault();
 
+        var submit = this.modal.getBody().find('form input[type=submit][data-clicked-button]');
+        if (typeof submit !== 'undefined') {
+            submit.removeAttr('data-clicked-button');
+        }
+
         // If we found invalid fields, focus on the first one and do not submit via ajax.
         if (!this.validateElements()) {
             return;
@@ -293,6 +316,10 @@ define([
         // Note that the button itself is not added, this may cause problems on
         // forms with multiple submit buttons.
         var formData = this.modal.getRoot().find('form').serialize();
+
+        if (typeof submit !== 'undefined') {
+            formData = formData + '&' + encodeURIComponent(submit.attr('name')) + '=' + encodeURIComponent(submit.attr('value'));
+        }
 
         M.util.js_pending('local_openlms_dialog_form_submit');
         fetchFormHtml(this.config.formUrl, formData)
