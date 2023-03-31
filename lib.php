@@ -25,30 +25,6 @@
 
 function local_openlms_extend_navigation(global_navigation $navigation) {
     if (isloggedin() && !isguestuser()
-        && file_exists(__DIR__ . '/../../enrol/programs/version.php')
-        && enrol_is_enabled('programs')) {
-
-        $n = $navigation->create(get_string('myprograms', 'enrol_programs'),
-            new moodle_url('/enrol/programs/my/index.php'),
-            global_navigation::TYPE_CUSTOM,
-            null,
-            'myprograms',
-            new pix_icon('myprograms', '', 'enrol_programs'));
-        $n->showinflatnavigation = true;
-        $navigation->add_node($n, 'mycourses');
-
-        if (has_capability('enrol/programs:viewcatalogue', context_system::instance())) {
-            $n = $navigation->create(get_string('catalogue', 'enrol_programs'),
-                new moodle_url('/enrol/programs/catalogue/index.php'),
-                global_navigation::TYPE_CUSTOM,
-                null,
-                'programscatalogue',
-                new pix_icon('catalogue', '', 'enrol_programs'));
-            $n->showinflatnavigation = true;
-            $navigation->add_node($n, null);
-        }
-    }
-    if (isloggedin() && !isguestuser()
         && file_exists(__DIR__ . '/../../admin/tool/udplans/version.php')
     ) {
         if (\tool_udplans\local\util::udplans_active()) {

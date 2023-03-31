@@ -25,12 +25,5 @@
 function xmldb_local_openlms_install() {
     global $DB;
 
-    if (file_exists(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php')) {
-        require_once(__DIR__ . '/../../../blocks/myprograms/db/upgradelib.php');
-        // NOTE: this is here because it has to run after block_timeline and
-        // block_recentlyaccessedcourses installation.
-        if (!defined('PHPUNIT_UTIL') || !PHPUNIT_UTIL) {
-            block_myprograms_add_block_to_dashboards();
-        }
-    }
+    // Nothing to do, "My programs" block is not installed by default any more.
 }
