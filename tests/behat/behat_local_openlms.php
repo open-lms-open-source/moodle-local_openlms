@@ -46,6 +46,7 @@ class behat_local_openlms extends behat_base {
         }
 
         $node = $this->get_node_in_container('button', $element, 'css_element', '.local_openlms-dialog_form');
+        $node->focus(); // Scroll to the button, it might be outside the dialog viewport.
         $this->ensure_node_is_visible($node);
 
         $node->click();
