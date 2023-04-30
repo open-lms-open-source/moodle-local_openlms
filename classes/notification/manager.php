@@ -142,7 +142,6 @@ abstract class manager {
                     .' <span class="badge badge-danger">'.get_string('error').'</span>';
             }
         }
-        \core_collator::asort_objects_by_property($notifications, 'name');
 
         $rows = [];
         foreach ($notifications as $notification) {

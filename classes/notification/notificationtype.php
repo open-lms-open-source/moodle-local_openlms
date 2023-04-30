@@ -27,6 +27,9 @@ use stdClass;
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class notificationtype {
+    /** @var null|string */
+    private static $oldforceflang = null;
+
     /**
      * Returns relevant component.
      *
@@ -49,12 +52,21 @@ abstract class notificationtype {
     }
 
     /**
+     * Returns message provider name.
+     *
+     * @return string
+     */
+    public static function get_provider(): string {
+        return static::get_notificationtype();
+    }
+
+    /**
      * Returns localised name of notification.
      *
      * @return string
      */
     public static function get_name(): string {
-        return get_string('messageprovider:' . static::get_notificationtype(), static::get_component());
+        return get_string('notification_' . static::get_notificationtype(), static::get_component());
     }
 
     /**
@@ -190,13 +202,52 @@ abstract class notificationtype {
     }
 
     /**
-     * Returns example placeholders for subject and body.
+     * Temporarily force a different language for notification.
      *
-     * @param int $instanceid
-     * @return array
+     * NOTE: better not make this hack public to prevent abuse, it would not be testable anyway.
+     *
+     * @param string $lang
+     * @return void
      */
-    public static function get_placeholders_example(int $instanceid): array {
-        return [];
+    final protected static function force_language(string $lang): void {
+        global $SESSION, $CFG;
+
+        if (isset(self::$oldforceflang)) {
+            debugging('Notification language was already forced', DEBUG_DEVELOPER);
+        }
+
+        if (!$lang || !get_string_manager()->translation_exists($lang, false)) {
+            $lang = $CFG->lang;
+        }
+
+        if (current_language() === $lang) {
+            return;
+        }
+
+        self::$oldforceflang = $SESSION->forcelang ?? null;
+        $SESSION->forcelang = $lang;
+        moodle_setlocale();
+    }
+
+    /**
+     * Revert forcing of different language.
+     *
+     * @return void
+     */
+    final protected static function revert_language(): void {
+        global $SESSION;
+
+        if (!isset(self::$oldforceflang) && !isset($SESSION->forcelang)) {
+            return;
+        }
+
+        if (isset(self::$oldforceflang) && self::$oldforceflang !== '') {
+            $SESSION->forcelang = self::$oldforceflang;
+        } else {
+            unset($SESSION->forcelang);
+        }
+        self::$oldforceflang = null;
+        moodle_setlocale();
     }
 
     /**

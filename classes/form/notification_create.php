@@ -44,9 +44,11 @@ final class notification_create extends \local_openlms\dialog_form {
         $mform->addElement('static', 'staticinstance', get_string('notification_instance', 'local_openlms'), $instance);
 
         $types = $manager::get_candidate_types($instanceid);
-        \core_collator::asort($types);
-        $mform->addElement('select', 'types', get_string('notification_types', 'local_openlms'), $types, ['multiple' => true]);
-        $mform->addRule('types', get_string('required'), 'required', null, 'client');
+        $elements = [];
+        foreach ($types as $type => $typename) {
+            $elements[] = $mform->createElement('checkbox', $type, $typename);
+        }
+        $mform->addGroup($elements, 'types', get_string('notification_types', 'local_openlms'), '<br />');
 
         $mform->addElement('advcheckbox', 'enabled', get_string('notification_enabled', 'local_openlms'), ' ');
         $mform->setDefault('enabled', 1);
@@ -56,6 +58,10 @@ final class notification_create extends \local_openlms\dialog_form {
 
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
+
+        if (empty($data['types'])) {
+            $errors['types'] = get_string('required');
+        }
 
         return $errors;
     }

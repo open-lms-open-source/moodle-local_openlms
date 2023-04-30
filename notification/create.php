@@ -65,7 +65,10 @@ if ($form->is_cancelled()) {
     redirect($returnurl);
 } else if ($data = $form->get_data()) {
     if (!empty($data->types)) {
-        foreach ($data->types as $type) {
+        foreach ($data->types as $type => $enabled) {
+            if (!$enabled) {
+                continue;
+            }
             $d = [
                 'component' => $data->component,
                 'instanceid' => $data->instanceid,

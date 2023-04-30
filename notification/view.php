@@ -71,8 +71,6 @@ $manager::setup_view_page($notification);
 /** @var \local_openlms\output\dialog_form\renderer $dialogformoutput */
 $dialogformoutput = $PAGE->get_renderer('local_openlms', 'dialog_form');
 
-echo $OUTPUT->header();
-
 echo '<dl class="row">';
 $name = $classname::get_name();
 echo '<dt class="col-3">' . get_string('notification', 'local_openlms') . ':</dt><dd class="col-9">' . $name . '</dd>';
@@ -88,15 +86,16 @@ echo '<dt class="col-3">' . get_string('notification_enabled', 'local_openlms') 
 echo '<dt class="col-3">' . get_string('description') . ':</dt><dd class="col-9">' . $description  . '</dd>';
 $custom = $notification->custom ? get_string('yes') : get_string('no');
 echo '<dt class="col-3">' . get_string('notification_custom', 'local_openlms') . ':</dt><dd class="col-9">' . $custom  . '</dd>';
-$a = $classname::get_placeholders_example($notification->instanceid);
+$a = [];
 $subject = $classname::get_subject($notification, $a);
 echo '<dt class="col-3">' . get_string('notification_subject', 'local_openlms') . ':</dt><dd class="col-9">' . $subject  . '</dd>';
 $body = $classname::get_body($notification, $a);
 echo '<dt class="col-3">' . get_string('notification_body', 'local_openlms') . ':</dt><dd class="col-9">' . $body  . '</dd>';
 echo '</dl>';
 
+$buttons = [];
+
 if ($manager::can_manage($notification->instanceid)) {
-    $buttons = [];
     $url = new \moodle_url('/local/openlms/notification/delete.php', ['id' => $notification->id]);
     $button = new \local_openlms\output\dialog_form\button($url, get_string('notification_delete', 'local_openlms'));
     $button->set_after_submit($button::AFTER_SUBMIT_REDIRECT);
@@ -106,7 +105,13 @@ if ($manager::can_manage($notification->instanceid)) {
         $button = new \local_openlms\output\dialog_form\button($url, get_string('notification_update', 'local_openlms'));
         $buttons[] = $dialogformoutput->render($button);
     }
-    echo $OUTPUT->box(implode('', $buttons), 'buttons');
+}
+if ($manageurl) {
+    $button = new single_button($manageurl, get_string('back'), 'get', false);
+    $buttons[] = ' ' . $OUTPUT->render($button);
 }
 
+if ($buttons) {
+    echo $OUTPUT->box(implode('', $buttons), 'buttons');
+}
 echo $OUTPUT->footer();

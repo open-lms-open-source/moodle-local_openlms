@@ -30,7 +30,7 @@
  * @return bool
  */
 function xmldb_local_openlms_upgrade($oldversion) {
-    global $DB;
+    global $DB, $CFG;
 
     $dbman = $DB->get_manager();
 
@@ -81,6 +81,17 @@ function xmldb_local_openlms_upgrade($oldversion) {
 
         // Openlms savepoint reached.
         upgrade_plugin_savepoint(true, 2023022600, 'local', 'openlms');
+    }
+
+    if ($oldversion < 2023042900) {
+
+        if (file_exists("$CFG->dirroot/enrol/programs/db/upgradelib.php")) {
+            require_once("$CFG->dirroot/enrol/programs/db/upgradelib.php");
+            enrol_programs_migrate_notifications();
+        }
+
+        // Openlms savepoint reached.
+        upgrade_plugin_savepoint(true, 2023042900, 'local', 'openlms');
     }
 
     return true;

@@ -84,8 +84,4 @@ class notificationtype_test extends \advanced_testcase {
             );
         }
     }
-
-    public function test_get_placeholders_example() {
-        $this->assertSame([], notificationtype::get_placeholders_example(999));
-    }
 }
