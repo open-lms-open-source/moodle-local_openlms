@@ -107,7 +107,7 @@ if ($manager::can_manage($notification->instanceid)) {
     }
 }
 if ($manageurl) {
-    $button = new single_button($manageurl, get_string('back'), 'get', false);
+    $button = new single_button($manageurl, get_string('back'), 'get');
     $buttons[] = ' ' . $OUTPUT->render($button);
 }
 

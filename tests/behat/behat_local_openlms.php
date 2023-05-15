@@ -235,4 +235,14 @@ class behat_local_openlms extends behat_base {
         $url = new moodle_url('/user/profile.php', ['id' => $user->id]);
         $this->execute('behat_general::i_visit', [$url]);
     }
+
+    /**
+     * Activate tenants if available.
+     *
+     * @Given tenant support was activated
+     */
+    public function activate_tenants() {
+        $this->skip_if_plugin_missing('tool_olms_tenant');
+        \tool_olms_tenant\tenants::activate_tenants();
+    }
 }
