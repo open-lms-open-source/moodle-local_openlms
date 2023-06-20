@@ -52,3 +52,4 @@ $string['notifications'] = 'Notifications';
 $string['pluginname'] = 'Open LMS utilities';
 $string['privacy:metadata:userid'] = 'User';
 $string['privacy:metadata:local_openlms_user_notified:tableexplanation'] = 'User notification tracking';
+$string['toomanyrecords'] = 'Too many records found';

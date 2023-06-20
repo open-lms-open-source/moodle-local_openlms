@@ -105,7 +105,7 @@ abstract class form_autocomplete_field extends \external_api {
      * @return \html_quickform_element
      */
     public static function add_form_element(\MoodleQuickForm $mform, array $arguments, string $name, string $label, array $attributes = []): \html_quickform_element {
-        $attributes['tagds'] = false;
+        $attributes['tags'] = false;
         $attributes['multiple'] = static::is_multi_select_field();
         $attributes['ajax'] = 'local_openlms/form_autocomplete_ajax';
         $attributes['valuehtmlcallback'] = static::get_label_callback($arguments);
