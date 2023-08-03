@@ -117,9 +117,10 @@ abstract class manager {
      * Render list of all instance notifications and management UI.
      *
      * @param int $instanceid
+     * @param string|null $tableid
      * @return string
      */
-    public static function render_notifications(int $instanceid): string {
+    public static function render_notifications(int $instanceid, ?string $tableid = null): string {
         global $DB, $PAGE;
 
         /** @var \local_openlms\output\dialog_form\renderer $dialogformoutput */
@@ -199,7 +200,7 @@ abstract class manager {
         }
 
         $table = new \html_table();
-        $table->id = static::get_component() . '_notifications';
+        $table->id = ($tableid ?? static::get_component() . '_notifications');
         $table->head = [
             get_string('notification', 'local_openlms'),
             get_string('notification_custom', 'local_openlms'),
