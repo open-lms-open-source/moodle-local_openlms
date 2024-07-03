@@ -114,6 +114,15 @@ class behat_local_openlms extends behat_base {
     }
 
     /**
+     * @Given I skip tests if :plugin is installed
+     */
+    public function skip_if_plugin_installed($plugin) {
+        if (get_config($plugin, 'version')) {
+            throw new \Moodle\BehatExtension\Exception\SkippedException("Tests were skipped because plugin '$plugin' is installed");
+        }
+    }
+
+    /**
      * Looks for definition of a term in a list.
      *
      * @Then I should see :text in the :label definition list item
