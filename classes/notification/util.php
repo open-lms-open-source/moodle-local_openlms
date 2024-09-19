@@ -280,12 +280,7 @@ final class util {
                 if ($filtername !== 'multilang' && $filtername !== 'multilang2') {
                     continue;
                 }
-                $path = $CFG->dirroot .'/filter/'. $filtername .'/filter.php';
-                if (!is_readable($path)) {
-                    continue;
-                }
-                include_once($path);
-                $filterclassname = 'filter_' . $filtername;
+                $filterclassname = 'filter_' . $filtername . '\text_filter';
                 if (!class_exists($filterclassname)) {
                     continue;
                 }

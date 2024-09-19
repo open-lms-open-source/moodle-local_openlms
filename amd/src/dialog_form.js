@@ -33,8 +33,9 @@ define([
     'core/yui',
     'core/event',
     'core/str',
-    'core/log'
-], function($, ModalFactory, ModalEvents, Ajax, Notification, Y, Event, Str, Log) {
+    'core/log',
+    'core_form/changechecker'
+], function($, ModalFactory, ModalEvents, Ajax, Notification, Y, Event, Str, Log, Changechecker) {
     var unloading = false;
 
     /**
@@ -105,7 +106,7 @@ define([
                     this.modal.destroy();
 
                     // Reset form-change-checker.
-                    this.resetDirtyFormState();
+                    Changechecker.resetAllFormDirtyStates();
 
                     // Focus on the trigger element that actually launched the modal.
                     if (this.config.triggerElement !== null) {
@@ -195,15 +196,6 @@ define([
         // By default this function does nothing.
         // Return here is irrelevant, it is only present to make eslint happy.
         return undefined;
-    };
-
-    /**
-     * Reset "dirty" form state (warning if there are changes)
-     */
-    DialogForm.prototype.resetDirtyFormState = function() {
-        Y.use('moodle-core-formchangechecker', function() {
-            M.core_formchangechecker.reset_form_dirty_state();
-        });
     };
 
     /**
