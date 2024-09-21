@@ -33,7 +33,7 @@ use local_openlms\output\extra_menu\dropdown;
  * @author     Petr Skoda
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class extra_menu implements \core\hook\described_hook {
+abstract class extra_menu {
     /** @var dropdown */
     protected $dropdown;
 
@@ -106,25 +106,5 @@ abstract class extra_menu implements \core\hook\described_hook {
 
         debugging('extra_menu::get_items() is deprecated, render extra_menu::get_dropdown() instead', DEBUG_DEVELOPER);
         return $this->dropdown->export_for_template($OUTPUT)['items'];
-    }
-
-    /**
-     * Hook purpose description in Markdown format
-     * used on Hooks overview page.
-     *
-     * @return string
-     */
-    public static function get_hook_description(): string {
-        debugging('Each extra_menu hook must define get_hook_description', DEBUG_DEVELOPER);
-        return 'Extra menu hook missing description';
-    }
-
-    /**
-     * List of tags that describe this hook.
-     *
-     * @return string[]
-     */
-    public static function get_hook_tags(): array {
-        return [];
     }
 }
