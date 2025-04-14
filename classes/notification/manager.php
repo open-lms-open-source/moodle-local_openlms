@@ -186,16 +186,12 @@ abstract class manager {
             $rows[] = $row;
         }
 
-        if (static::get_candidate_types($instanceid)) {
+        if ($canmanage && static::get_candidate_types($instanceid)) {
             $url = new \moodle_url('/local/openlms/notification/create.php', ['instanceid' => $instanceid, 'component' => $component]);
             $icon = new \local_openlms\output\dialog_form\icon($url, 'e/insert', get_string('notification_create', 'local_openlms'));
             $icon = $dialogformoutput->render($icon);
             $cell = new \html_table_cell($icon);
-            if ($canmanage) {
-                $cell->colspan = 4;
-            } else {
-                $cell->colspan = 3;
-            }
+            $cell->colspan = 4;
             $rows[] = [$cell];
         }
 
