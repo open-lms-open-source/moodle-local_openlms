@@ -68,7 +68,8 @@ final class util {
         if (!$classname) {
             throw new \invalid_parameter_exception('Invalid notification type');
         }
-        if (empty($data->instanceid)) {
+        if (!isset($data->instanceid)) {
+            // Instanceid 0 can be used for notifications, where we do not want separate instances.
             throw new \invalid_parameter_exception('Invalid notification instanceid');
         }
         if (empty($data->enabled)) {
