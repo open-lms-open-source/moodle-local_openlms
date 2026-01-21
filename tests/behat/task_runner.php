@@ -40,7 +40,6 @@ $CFG->debug = (E_ALL | E_STRICT);
 $CFG->debugdisplay = 1;
 
 require_once($CFG->libdir.'/clilib.php');
-require_once($CFG->libdir.'/cronlib.php');
 
 \core\session\manager::write_close();
 
@@ -64,23 +63,19 @@ if (!$lock = $cronlockfactory->get_lock('\\' . get_class($task), 10)) {
     throw new Exception('Unable to obtain task lock for scheduled task');
 }
 $task->set_lock($lock);
-if (!$task->is_blocking()) {
-    $cronlock->release();
-} else {
-    $task->set_cron_lock($cronlock);
-}
+$cronlock->release();
 
 @header('Content-Type: text/plain; charset=utf-8');
 @ini_set('html_errors', 'off');
 
 try {
     // Prepare the renderer.
-    cron_prepare_core_renderer();
+    \core\cron::prepare_core_renderer(true);
 
     $task->execute();
 
     // Restore the previous renderer.
-    cron_prepare_core_renderer(true);
+    \core\cron::prepare_core_renderer(true);
 
     // Mark task complete.
     \core\task\manager::scheduled_task_complete($task);
@@ -89,7 +84,7 @@ try {
 
 } catch (Throwable $e) {
     // Restore the previous renderer.
-    cron_prepare_core_renderer(true);
+    \core\cron::prepare_core_renderer(true);
 
     // Mark task failed and throw exception.
     \core\task\manager::scheduled_task_failed($task);
