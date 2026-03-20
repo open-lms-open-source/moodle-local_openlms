@@ -249,7 +249,7 @@ abstract class manager {
             $table->head[] = get_string('actions');
         }
         $table->data = $rows;
-        $table->attributes['class'] = 'admintable generaltable';
+        $table->attributes['class'] = 'admintable generaltable table mb-3';
         $result = \html_writer::table($table);
 
         return $result;
