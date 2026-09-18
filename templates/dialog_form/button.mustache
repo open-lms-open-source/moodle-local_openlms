@@ -17,7 +17,7 @@ along with Moodle. If not, see
 }}
 
 <noscript><form method="get" action="{{formurl}}"><button type="submit">{{title}}</button></form></noscript>
-<button id="dialog-form-button-{{uniqid}}"
+<button id="dialog-form-button-{{uniqid}}" type="button"
   data-form-url="{{formurl}}" data-dialog-name="{{dialogname}}" data-after-submit="{{aftersubmit}}"
   class="btn {{#primary}}btn-primary{{/primary}}{{^primary}}btn-secondary{{/primary}} {{class}}">{{{icon}}}{{title}}</button>
 
@@ -31,7 +31,8 @@ require([
           dialogName = actionButton.data('dialog-name'),
           afterSubmit = actionButton.data('after-submit');
 
-    actionButton.on('click', function() {
+    actionButton.on('click', function(e) {
+        e.preventDefault();
         new DialogForm({
             modalConfig: {title: dialogName},
             triggerElement: actionButton,

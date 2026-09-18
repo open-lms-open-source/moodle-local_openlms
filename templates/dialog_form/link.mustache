@@ -17,7 +17,7 @@ along with Moodle. If not, see
 }}
 
 <noscript><a href="{{formurl}}">{{title}}</a></noscript>
-<a id="dialog-form-action-{{uniqid}}" href="#" class="{{class}}"
+<a id="dialog-form-action-{{uniqid}}" href="{{formurl}}" class="{{class}}"
   data-form-url="{{formurl}}" data-dialog-name="{{dialogname}}" data-after-submit="{{aftersubmit}}"
 >{{title}}</a>
 
@@ -31,7 +31,8 @@ require([
         dialogName = actionIcon.data('dialog-name'),
         afterSubmit = actionIcon.data('after-submit');
 
-    actionIcon.on('click', function() {
+    actionIcon.on('click', function(e) {
+        e.preventDefault();
         new DialogForm({
             modalConfig: {title: dialogName},
             triggerElement: actionIcon,

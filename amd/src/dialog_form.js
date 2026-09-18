@@ -26,15 +26,16 @@
  */
 define([
     'jquery',
-    'core/modal_factory',
+    'core/modal_cancel',
     'core/modal_events',
     'core/ajax',
     'core/notification',
     'core/yui',
     'core/event',
     'core/str',
-    'core/log'
-], function($, ModalFactory, ModalEvents, Ajax, Notification, Y, Event, Str, Log) {
+    'core/log',
+    'core_form/changechecker'
+], function($, ModalCancel, ModalEvents, Ajax, Notification, Y, Event, Str, Log, FormChangeChecker) {
     var unloading = false;
 
     /**
@@ -51,7 +52,7 @@ define([
     var DialogForm = function(config) {
         this.config = config;
         this.config.modalConfig = this.config.modalConfig || {};
-        this.config.modalConfig.type = ModalFactory.types.CANCEL;
+        this.config.modalConfig.type = ModalCancel.TYPE || 'CANCEL';
         this.init();
     };
 
@@ -83,7 +84,7 @@ define([
                 // We don't attach trigger element to modal here to avoid MDL-70395.
                 // We normally initialise DialogForm as result of some event
                 // on trigger element, so new listener is not required.
-                return ModalFactory.create(this.config.modalConfig);
+                return ModalCancel.create(this.config.modalConfig);
             }.bind(this))
             .then(function(modal) {
                 // Keep a reference to the modal.
@@ -98,14 +99,16 @@ define([
 
                 // After successful submit, when we press "Cancel" or close the dialogue by clicking on X in the top right corner.
                 this.modal.getRoot().on(ModalEvents.hidden, function() {
+                    var form = this.modal.getRoot().find('form')[0];
+
                     // Notify listeners that the form is about to be submitted (this will reset atto autosave).
-                    Event.notifyFormSubmitAjax(this.modal.getRoot().find('form')[0], true);
+                    Event.notifyFormSubmitAjax(form, true);
+
+                    // Reset form-change-checker.
+                    this.resetDirtyFormState(form);
 
                     // Destroy the modal.
                     this.modal.destroy();
-
-                    // Reset form-change-checker.
-                    this.resetDirtyFormState();
 
                     // Focus on the trigger element that actually launched the modal.
                     if (this.config.triggerElement !== null) {
@@ -199,11 +202,48 @@ define([
 
     /**
      * Reset "dirty" form state (warning if there are changes)
+     *
+     * @param {HTMLElement} [form] Optional form element to reset
      */
-    DialogForm.prototype.resetDirtyFormState = function() {
-        Y.use('moodle-core-formchangechecker', function() {
+    DialogForm.prototype.resetDirtyFormState = function(form) {
+        var resetModern = function(checker) {
+            if (checker) {
+                if (form && typeof checker.resetFormDirtyState === 'function') {
+                    checker.resetFormDirtyState(form);
+                }
+                if (typeof checker.resetAllFormDirtyStates === 'function') {
+                    checker.resetAllFormDirtyStates();
+                }
+            }
+        };
+
+        if (typeof FormChangeChecker !== 'undefined' && FormChangeChecker) {
+            resetModern(FormChangeChecker);
+        } else if (typeof window.require !== 'undefined') {
+            try {
+                window.require(['core_form/changechecker'], function(checker) {
+                    resetModern(checker);
+                }, function() {
+                    // Ignore if core_form/changechecker cannot be loaded.
+                });
+            } catch (ignored) {
+                // Ignore errors.
+            }
+        }
+
+        if (typeof M !== 'undefined' && M.core_formchangechecker && typeof M.core_formchangechecker.reset_form_dirty_state === 'function') {
             M.core_formchangechecker.reset_form_dirty_state();
-        });
+        } else if (typeof Y !== 'undefined' && Y && typeof Y.use === 'function') {
+            try {
+                Y.use('moodle-core-formchangechecker', function() {
+                    if (typeof M !== 'undefined' && M.core_formchangechecker && typeof M.core_formchangechecker.reset_form_dirty_state === 'function') {
+                        M.core_formchangechecker.reset_form_dirty_state();
+                    }
+                });
+            } catch (ignored) {
+                // Ignore legacy YUI errors.
+            }
+        }
     };
 
     /**
